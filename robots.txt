@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://boxtech-gift.github.io/sitemap.xml
