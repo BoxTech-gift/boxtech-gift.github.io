@@ -4,8 +4,8 @@ Usage: build.py [BASE] [SITE_URL]
   BASE      '/' for the user/org root site (boxtech-gift.github.io), or '/<repo>/' for a project site.
   SITE_URL  absolute site URL for og:image and sitemap (optional).
 Sources: the original app build in $SRC (assets, catalog, og.jpg, favicon.svg, app icon) and the
-2026 gifts catalog in $CATALOG_SRC (tools/catalog-2026: data.py transcription, export.py, web/ page;
-site/ = exported WebP crops + pages, data.json, models.json/csv, PDF).
+2026 gifts catalogues in $CATALOG_SRC (tools/catalog-2026: data.py + data2.py transcriptions, export.py, wm.py
+watermark, brand/ logo, web/ page; site/ = exported watermarked WebP crops + pages, data.json, models.json/csv, PDFs).
 All site images are WebP (q82, visually lossless) except og.jpg, which stays an optimised JPEG for link previews.
 """
 import os, sys, shutil, re, json
@@ -80,7 +80,7 @@ patch('routes-T_lj7gbW.js', [(IMG, r'`%scatalog/\1.webp`' % BASE, 2)])
 # 4) 2026 gifts catalog (static page at /catalog-2026/) wired into the app
 CAT_URL = BASE + 'catalog-2026/'
 CAT_INFO = json.load(open(f'{CATALOG_SRC}/models.json', encoding='utf8'))['meta']
-NP, NM = CAT_INFO['products'], CAT_INFO['variants']
+NP, NM = CAT_INFO['products'], CAT_INFO['variants']  # both catalogues
 #  a) header link (every route)
 patch('index-DLFO-8IC.js', [
     ('children:r(T.indexLabel)}),',
@@ -96,9 +96,9 @@ patch('index-DLFO-8IC.js', [
 #  c) home page: catalog 2026 banner above the collections
 patch('routes-T_lj7gbW.js', [
     ('(0,h.jsxs)(`section`,{id:`work`,',
-     '(0,h.jsx)(`section`,{className:`mx-auto mt-24 max-w-7xl px-5`,children:(0,h.jsxs)(`a`,{href:`%s`,className:`group grid items-center gap-8 border border-ink bg-paper-2 p-6 lg:grid-cols-12`,children:[(0,h.jsxs)(`div`,{className:`lg:col-span-8`,children:[(0,h.jsx)(`p`,{className:`text-sm text-seal`,children:n({ar:`جديد · الكتالوج الكامل`,en:`New · full catalog`})}),(0,h.jsx)(`h2`,{className:`${c} mt-3 text-4xl leading-tight sm:text-5xl group-hover:text-seal`,children:n({ar:`كتالوج الهدايا ٢٠٢٦`,en:`Gifts catalog 2026`})}),(0,h.jsx)(`p`,{className:`mt-3 max-w-xl text-sm text-pretty text-muted`,children:n({ar:`%d منتجًا و%d رقم موديل بكل الألوان، مع البحث برقم الموديل وعارض الصفحات وتحميل الكتالوج PDF.`,en:`%d products and %d model numbers in every colour, with model-number search, a page viewer and the PDF download.`})}),(0,h.jsx)(`span`,{className:`mt-6 inline-flex h-11 items-center bg-ink px-5 text-sm text-on-seal`,children:n({ar:`افتح الكتالوج`,en:`Open the catalog`})})]}),(0,h.jsx)(`div`,{className:`lg:col-span-4`,children:(0,h.jsx)(`img`,{src:`%spages/t001.webp`,alt:``,loading:`lazy`,width:184,height:260,style:{width:`auto`,maxHeight:`260px`,margin:`0 auto`,boxShadow:`0 10px 30px rgba(28,25,21,.25)`}})})]})}),(0,h.jsxs)(`section`,{id:`work`,' % (CAT_URL, NP, NM, NP, NM, CAT_URL), 1),
+     '(0,h.jsx)(`section`,{className:`mx-auto mt-24 max-w-7xl px-5`,children:(0,h.jsxs)(`a`,{href:`%s`,className:`group grid items-center gap-8 border border-ink bg-paper-2 p-6 lg:grid-cols-12`,children:[(0,h.jsxs)(`div`,{className:`lg:col-span-8`,children:[(0,h.jsx)(`p`,{className:`text-sm text-seal`,children:n({ar:`جديد · الكتالوج الكامل`,en:`New · full catalog`})}),(0,h.jsx)(`h2`,{className:`${c} mt-3 text-4xl leading-tight sm:text-5xl group-hover:text-seal`,children:n({ar:`كتالوج الهدايا ٢٠٢٦`,en:`Gifts catalog 2026`})}),(0,h.jsx)(`p`,{className:`mt-3 max-w-xl text-sm text-pretty text-muted`,children:n({ar:`%d منتجًا و%d موديل/لون من الكتالوج ١ والكتالوج ٢، مع البحث برقم الموديل وعارض الصفحات وتحميل الكتالوجين PDF.`,en:`%d products and %d models/colours from catalogue 1 and catalogue 2, with model-number search, a page viewer and both PDF downloads.`})}),(0,h.jsx)(`span`,{className:`mt-6 inline-flex h-11 items-center bg-ink px-5 text-sm text-on-seal`,children:n({ar:`افتح الكتالوج`,en:`Open the catalog`})})]}),(0,h.jsx)(`div`,{className:`lg:col-span-4`,children:(0,h.jsx)(`img`,{src:`%spages/t001.webp`,alt:``,loading:`lazy`,width:184,height:260,style:{width:`auto`,maxHeight:`260px`,margin:`0 auto`,boxShadow:`0 10px 30px rgba(28,25,21,.25)`}})})]})}),(0,h.jsxs)(`section`,{id:`work`,' % (CAT_URL, NP, NM, NP, NM, CAT_URL), 1),
 ])
-#  d) request list: render catalog items (not in the 34-product data) with their O-model code; safe colour lookup
+#  d) request list: render catalog items (not in the 34-product data) with their code (O… / N… model or N-P… reference); safe colour lookup
 patch('list-BeZjhFSD.js', [
     ('F=h.map(e=>{let t=s(e.id);return t?{item:e,product:t}:null}).filter(e=>!!e);',
      'F=h.map(e=>{let t=s(e.id);return t?{item:e,product:t}:e&&e.cat?{item:e,product:{id:e.id,code:e.cat.code,name:e.cat.name,cat:e.cat}}:null}).filter(e=>!!e),Q=(t,n)=>n.cat?n.cat.color?e(n.cat.color):``:i[t.color]?e(i[t.color]):``;', 1),
@@ -115,8 +115,8 @@ ver = hashlib.sha1(b''.join(open(f'{CATALOG_SRC}/{f}', 'rb').read() for f in ('w
 for f in ('index.html', 'app.js', 'app.css'):
     t = open(f'{CATALOG_SRC}/web/{f}', encoding='utf8').read().replace('__V__', ver).replace('__OG__', (SITE + '/og.jpg') if SITE else (BASE + 'og.jpg'))
     open(f'{OUT}/catalog-2026/{f}', 'w', encoding='utf8').write(t)
-os.makedirs(f'{OUT}/tools/catalog-2026/web', exist_ok=True)
-for f in ('data.py', 'export.py', 'web/index.html', 'web/app.js', 'web/app.css'):
+os.makedirs(f'{OUT}/tools/catalog-2026/web', exist_ok=True); os.makedirs(f'{OUT}/tools/catalog-2026/brand', exist_ok=True)
+for f in ('data.py', 'data2.py', 'export.py', 'wm.py', 'brand/watermark.png', 'brand/logo.html', 'web/index.html', 'web/app.js', 'web/app.css'):
     shutil.copy(f'{CATALOG_SRC}/{f}', f'{OUT}/tools/catalog-2026/{f}')
 
 og = (SITE + '/og.jpg') if SITE else (BASE + 'og.jpg')
