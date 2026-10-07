@@ -21,6 +21,8 @@ Arabic-first (RTL, with an English toggle) catalog of corporate & welcome gifts,
   on `/list` and in the quote form with their model / reference codes in the WhatsApp / copy / print text.
 - Model-number data: [`/catalog-data/models.csv`](catalog-data/models.csv) and
   [`/catalog-data/models.json`](catalog-data/models.json) (`catalog`, `model` and `ref` columns).
+- Floating WhatsApp button (Saudi number `+966 54 110 2224`, prefilled Arabic greeting) on every page, injected by
+  `tools/build.py` (SPA shell for all routes + `404.html`, and `/catalog-2026/`).
 - No login, no server: requests are sent via WhatsApp (`wa.me`), copy-to-clipboard, or print.
 - `index.html`, `404.html` and every route folder contain the same SPA shell; `404.html` is the deep-link fallback.
 - Images are WebP (q80–82, visually lossless); `og.jpg` stays an optimised JPEG for link previews.
