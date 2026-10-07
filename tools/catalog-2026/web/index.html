@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>كتالوج الهدايا ٢٠٢٦ — BoxTech gifts</title>
+<meta name="description" content="كتالوج الهدايا ٢٠٢٦ من BoxTech gifts: كل المنتجات بأرقام الموديلات والألوان، مع البحث برقم الموديل وإضافة القطع إلى قائمة الطلب."/>
+<meta name="theme-color" content="#F6F1E7"/>
+<meta property="og:title" content="كتالوج الهدايا ٢٠٢٦ — BoxTech gifts"/>
+<meta property="og:description" content="كل منتجات كتالوج الهدايا ٢٠٢٦ بأرقام الموديلات والألوان."/>
+<meta property="og:image" content="__OG__"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg"/>
+<link rel="icon" href="../favicon.ico" sizes="48x48"/>
+<link rel="apple-touch-icon" href="../apple-touch-icon.png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&amp;family=Fraunces:ital,wght@0,500;0,600;1,500&amp;family=IBM+Plex+Sans+Arabic:wght@400;500;600&amp;display=swap"/>
+<link rel="stylesheet" href="app.css?v=__V__"/>
+<link rel="preload" href="data.json?v=__V__" as="fetch" crossorigin="anonymous"/>
+</head>
+<body>
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="../" aria-label="BoxTech gifts">
+      <svg viewBox="0 0 32 32" class="brand-ic" aria-hidden="true"><rect x="3" y="10" width="26" height="19" fill="none" stroke="currentColor" stroke-width="2"/><rect x="2" y="6" width="28" height="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 6v23" stroke="#9c3b2e" stroke-width="3"/></svg>
+      <span class="brand-t"><b>BoxTech</b><i>gifts</i></span>
+    </a>
+    <nav class="nav">
+      <a href="../" data-t="home">الرئيسية</a>
+      <a href="#pages" data-t="viewer" class="hide-sm">عارض الصفحات</a>
+      <button type="button" id="lang" class="nav-btn">EN</button>
+      <a href="../list/" class="nav-list" aria-label="قائمة الطلب" data-ta="list"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg><span id="count">0</span></a>
+      <a href="../list/" class="btn btn-ink hide-sm" data-t="toList">قائمة الطلب</a>
+    </nav>
+  </div>
+</header>
+<main>
+  <section class="hero wrap">
+    <p class="kicker" data-t="kicker">BoxTech gifts · الإصدار ٢٠٢٦</p>
+    <h1 class="display" data-t="title">كتالوج الهدايا ٢٠٢٦</h1>
+    <p class="lede" id="lede"></p>
+    <div class="hero-actions">
+      <a class="btn btn-ink" href="#products" data-t="browse">تصفّح المنتجات</a>
+      <a class="btn btn-line" href="#pages" data-t="viewer">عارض الصفحات</a>
+      <a class="btn btn-line" href="BoxTech-gifts-catalog-2026.pdf" download id="pdf"><span data-t="pdf">تحميل الكتالوج PDF</span> <small id="pdfsize"></small></a>
+    </div>
+    <p class="files"><span data-t="files">ملفات أرقام الموديلات:</span> <a href="../catalog-data/models.csv" download>models.csv</a> · <a href="../catalog-data/models.json" download>models.json</a></p>
+    <p class="note" data-t="prefix">جميع أرقام الموديلات من الكتالوج تبدأ بالحرف O (مثال: <bdi>O19030-411</bdi>)، ويمكن البحث بها مع الحرف O أو بدونه.</p>
+  </section>
+
+  <section id="products" class="wrap sec">
+    <div class="tools">
+      <label class="search"><span class="sr" data-t="search">بحث</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16.5 16.5L21 21" stroke="currentColor" stroke-width="1.8"/></svg>
+        <input id="q" type="search" autocomplete="off" enterkeyhint="search" placeholder="ابحث برقم الموديل أو الاسم"/>
+      </label>
+      <p id="stat" class="stat" aria-live="polite"></p>
+    </div>
+    <div id="cats" class="cats" role="tablist"></div>
+    <div id="grid" class="grid"></div>
+    <p id="empty" class="empty" hidden data-t="empty">لا توجد نتائج مطابقة. جرّب رقم موديل آخر أو كلمة مختلفة.</p>
+  </section>
+
+  <section id="pages" class="sec pages">
+    <div class="wrap">
+      <h2 class="display h2" data-t="viewerTitle">تصفّح الكتالوج صفحة بصفحة</h2>
+      <div class="viewer">
+        <div class="v-bar">
+          <button type="button" class="btn btn-line" id="prev" data-t="prev">السابقة</button>
+          <label class="v-go"><span data-t="page">صفحة</span> <input id="pno" inputmode="numeric" value="1"/> <span>/ 111</span></label>
+          <button type="button" class="btn btn-line" id="next" data-t="next">التالية</button>
+        </div>
+        <figure class="v-fig"><img id="pimg" alt="" width="828" height="1170" decoding="async"/></figure>
+        <div id="ponpage" class="ponpage"></div>
+        <div id="thumbs" class="thumbs" aria-label="pages"></div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="foot wrap"><span>BoxTech gifts — <span data-t="title">كتالوج الهدايا ٢٠٢٦</span></span><a href="../" data-t="home">الرئيسية</a></footer>
+<a href="../list/" id="fab" class="fab" hidden><span data-t="toList">قائمة الطلب</span> <b id="fabn">0</b></a>
+<div id="toast" class="toast" role="status" hidden></div>
+<script src="app.js?v=__V__" defer></script>
+</body>
+</html>
