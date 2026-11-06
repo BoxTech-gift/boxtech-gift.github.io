@@ -3,8 +3,8 @@
 
 Catalogue 1 (data.py, 111 pages): every model number is published with the prefix "O" (O19030-411).
 Catalogue 2 (data2.py, original 223 pages; the first and last page are removed -> 221 pages):
-  printed model numbers get the prefix "N" (NF-191, NP207); products without a printed model number get a
-  reference code N-P<page>-<k>[-<colour #>] that is used in the request list / WhatsApp text instead.
+  printed model numbers get the prefix "N" (NF-191, NP207); products without a printed supplier code get an
+  N-prefixed page-based model number N-P<page>-<k>[-<colour #>] (same code used in the request list / WhatsApp).
 Every product crop and every page image carries the BoxTech gifts watermark (wm.py), always applied to clean
 source pixels rendered from the PDFs (never to an already watermarked file).
 
@@ -112,13 +112,15 @@ for catk, D in (('1', D1), ('2', D2)):
             else:
                 ref = ref0 if len(p['variants']) == 1 else '%s-%d' % (ref0, j + 1)
                 if m:
+                    # Printed supplier code -> N-prefix (NF-191, NP207)
                     pm = C['prefix'] + m; kind = 'm'
                     vid = pm if sum(1 for x in p['variants'] if x[0] == m) == 1 else '%s-%s' % (pm, ck.replace('/', '-'))
                 else:
-                    pm = ''; kind = 'r'; vid = ref
-            vs.append(dict(id=vid, model=pm, model_raw=m, ref=ref, kind=kind, color=c, label=lab))
+                    # No printed code in the PDF: publish the page-based N-P code as the model number
+                    pm = ref; kind = 'm'; vid = ref
+            vs.append(dict(id=vid, model=pm, model_raw=m or pm, ref=ref, kind=kind, color=c, label=lab))
             spec = ' | '.join(x for x in (p['specs'], lab) if x)
-            note = p['note'] if catk == '1' or m else ' | '.join(x for x in ('لا يوجد رقم موديل مطبوع في الكتالوج', p['note']) if x)
+            note = p['note'] if catk == '1' or m else ' | '.join(x for x in ('رقم الموديل N-P (لا يوجد كود مورّد مطبوع في الكتالوج)', p['note']) if x)
             rows.append([catk, n, f"{CAT[p['cat']][0]} / {CAT[p['cat']][1]}", p['ar'], p['en'], spec, pm, ref,
                          f"{c['ar']} / {c['en']}", note])
         if catk == '2' and not any(v['model'] for v in vs): noprint.append(pid)
@@ -153,9 +155,9 @@ for c in CATALOGS.values():
                         pages=c['last'] - c['first'] + 1, source_pdf='/catalog-2026/' + c['pdf'], pdf_bytes=os.path.getsize(c['pdf_src']), **st))
 catmeta[1].update(original_pages=C2_TOTAL, removed_pages=[1, C2_TOTAL],
                   page_note='page = original page number = printed "PAGE N" label; trimmed-PDF page = page - 1 (original p.32 is printed "PAGE 31", p.146 is printed "PAGE 52")',
-                  reference_note='Catalogue 2 prints model numbers for two products only (F-191, P207 -> NF-191, NP207). All other variants have model = "" and a reference code N-P<page>-<k>[-<colour #>] used in the request list.')
+                  reference_note='Catalogue 2 prints supplier model numbers for two products only (F-191, P207 -> NF-191, NP207). All other variants use page-based model numbers N-P<page>-<k>[-<colour #>].')
 meta = dict(title_ar='كتالوج الهدايا ٢٠٢٦', title_en='BoxTech gifts catalog 2026',
-            model_prefix_note='Catalogue 1 model numbers are prefixed with "O" (O19030-411 = code 19030-411); catalogue 2 printed model numbers are prefixed with "N" (NF-191 = F-191).',
+            model_prefix_note='Catalogue 1 model numbers are prefixed with "O" (O19030-411 = code 19030-411); catalogue 2 model numbers are prefixed with "N" (NF-191 = F-191, or N-P004-1 when no supplier code is printed).',
             catalogs=catmeta, uncertain=uncertain, duplicate_models_catalog1=dups, collisions_catalog2_vs_1=collisions,
             catalog2_products_without_printed_model=len(noprint), **allst)
 full = dict(meta=meta, categories=cats, products=products)

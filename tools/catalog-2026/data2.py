@@ -2,8 +2,9 @@
 # page = original PDF page number = the printed "PAGE N" label (exceptions noted). Page 1 (cover) and
 # page 223 (back cover / supplier contact page) are removed from the published catalogue.
 # The trimmed PDF keeps original pages 2-222, so trimmed-PDF page = original page - 1.
-# The catalogue prints no model numbers except two: F-191 (p.98) and P207 (p.95); those are published
-# with the prefix "N". Every other product gets a reference code N-P<page>-<k> instead (see export).
+# The catalogue prints supplier model numbers for two products only: F-191 (p.98) and P207 (p.95); those
+# are published with the prefix "N" (NF-191, NP207). Every other product gets an N-prefixed page-based
+# model number N-P<page>-<k> (see export).
 # Arabic names are translations of the English catalogue text (rosary pages are printed in Arabic).
 D2=[]
 def P(page,cat,ar,en,specs,variants,box=None,note=''):
